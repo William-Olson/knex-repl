@@ -3,7 +3,7 @@ body {
   overflow-y: scroll;
 }
 .content-wrapper {
-  margin-top: 100px;
+  margin-top: 80px;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -26,6 +26,9 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+#editor {
+  font-size: 0.8rem;
 }
 .code {
   flex: 1 1 auto;
@@ -55,7 +58,7 @@ body {
 }
 button {
   padding: 0.5rem;
-  margin: 1rem;
+  margin: 1.5rem;
   width: 5rem;
   border-radius: 5px;
   user-select: none;

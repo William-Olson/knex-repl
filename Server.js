@@ -35,8 +35,8 @@ module.exports = class Server {
     this._app.set('views', path.join(__dirname, 'views'));
     this._app.set('view engine', 'jade');
 
-    // uncomment after placing your favicon in /public
-    //this._app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+    // set favicon
+    this._app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
     // init middleware utils
     this._app.use(bodyParser.json());

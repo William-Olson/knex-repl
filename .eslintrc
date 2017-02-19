@@ -12,7 +12,8 @@
   },
   "globals": {
     "ace": true,
-    "angular": true
+    "angular": true,
+    "_": true
   },
   "rules": {
 

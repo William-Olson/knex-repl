@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  .repl-container(ng-controller="mainCtrl")
+    .title-header
+      h1 Knex Repl
+      p Write some knex query code. The knex instance is available as a variable called knex.
+
+    .editor-area
+      div.code.js(id='editor' ng-model='input')
+      pre.output.sql(ng-model='output') {{ output }}
+
+    .bttns
+      button(ng-click='submit()') Submit
+      button(ng-click='clear()') Clear
+
+    .errs
+      .errMsg(ng-show="error" ng-bind-html="error | to_trusted")

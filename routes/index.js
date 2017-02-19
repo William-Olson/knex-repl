@@ -21,16 +21,14 @@ module.exports = class Routes {
 
     // exec the code
     executor.input(toParse);
-    const [ res, err ] = executor.getResultOrErr();
+    const [ res, err ] = executor.getResultOrErrStr();
     if (err) {
-      console.log(err);
       throw new Error(err);
     }
 
     // format the output
     const result = await formatter(res);
     if (result.err) {
-      console.log(result.err.message);
       throw new Error(result.err.message);
     }
 

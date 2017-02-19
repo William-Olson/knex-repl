@@ -1,6 +1,5 @@
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const logger = require('morgan');
 const favicon = require('serve-favicon');
 const path = require('path');
 const express = require('express');
@@ -9,6 +8,7 @@ const http = require('http');
 const debug = require('debug')('server:server');
 
 const routes = require('./routes');
+const customWrapper = require('./routes/wrapper');
 const PORT = '9933';
 
 module.exports = class Server {
@@ -17,7 +17,7 @@ module.exports = class Server {
     this._listener = null;
     this._port = this._normalizePort(process.env.PORT || PORT);
     this._app = express();
-    this._harness = new Harness(this._app, { async: true });
+    this._harness = new Harness(this._app, { customWrapper });
   }
 
   start()
@@ -39,7 +39,6 @@ module.exports = class Server {
     //this._app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
     // init middleware utils
-    this._app.use(logger('dev'));
     this._app.use(bodyParser.json());
     this._app.use(bodyParser.urlencoded({ extended: false }));
     this._app.use(cookieParser());

@@ -9,10 +9,12 @@ block content
 
     .bttns
       .fake-a.warn(ng-click='clear()') Clear
+      .fake-a.cp-code(ng-click='selectAll()' data-clipboard-text='{{ getCode() }}') Copy
+      .fake-a.cp-sql(ng-click='focus()' data-clipboard-target='.output.sql') Copy-SQL
       .fake-a(ng-show='!selectingTheme' ng-click='selectingTheme=!selectingTheme') Theme
       select(ng-show='selectingTheme' ng-model='currentTheme' ng-change='setTheme()')
         option(ng-repeat="theme in themes" value="{{theme}}") {{theme}}
-      .fake-a(ng-show='selectingTheme' ng-click='selectingTheme=!selectingTheme') Ok
+      .fake-a(ng-show='selectingTheme' ng-click='selectingTheme=!selectingTheme; focus()') Ok
 
     .editor-area
       div.code.js(id='editor' ng-model='input')

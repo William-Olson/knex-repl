@@ -13,7 +13,8 @@
   "globals": {
     "ace": true,
     "angular": true,
-    "_": true
+    "_": true,
+    "Clipboard": true
   },
   "rules": {
 

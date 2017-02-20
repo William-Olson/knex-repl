@@ -52,10 +52,15 @@ function mainCtrl($scope, editorSvc)
 
   editorSvc.init().onChange(submit);
   editorSvc.setDefaultText('knex.from(\'users\')');
+
   $scope.clear = clear;
   $scope.themes = aceThemes;
   $scope.currentTheme = aceThemes[0];
   $scope.setTheme = setTheme;
+  $scope.getCode = editorSvc.getInput;
+  $scope.selectAll = editorSvc.selectAll;
+  $scope.focus = editorSvc.focus;
+
 }
 
 
@@ -99,6 +104,10 @@ function editorSvc($http)
     service._editor.getSession().setMode('ace/mode/javascript');
     service._editor.getSession().setTabSize(2);
     service._editor.getSession().setUseSoftTabs(true);
+
+    // init clipboards
+    service._codeClp = new Clipboard('.cp-code');
+    service._sqlClp = new Clipboard('.cp-sql');
     return service;
   };
 
@@ -118,6 +127,22 @@ function editorSvc($http)
     service._editor.setValue('');
     service._editor.focus();
     return service;
+  };
+
+  service.getInput = function() {
+    return service._editor.getValue().trim();
+  };
+
+  service.focus = function(ms = 200) {
+    return _.debounce(function() {
+      service._editor.focus();
+    }, ms)();
+  };
+
+  service.selectAll = function() {
+    const txt = service._editor.getValue().trim();
+    service._editor.findPrevious(txt);
+    service._editor.focus();
   };
 
   service.onChange = function(fn, optDebounceMs) {

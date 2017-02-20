@@ -15,7 +15,7 @@ docker run -it -p 9933:9933 willko/knex-repl
 ```
 
 After running the above docker commands, the repl should be
-accessible at http://localhost:9933
+accessible at `http://localhost:9933`
 
 ##### Build Locally
 

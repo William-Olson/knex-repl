@@ -56,9 +56,20 @@ body
     overflow-y auto
     color lighten(darkred, 10%)
 
+.fake-a
+  color darken(lightgrey, 40%)
+  cursor pointer
+  padding 0.5rem 1rem
+  display inline-block
+  &:hover
+    text-decoration underline
+
+.fake-a.warn
+  color lighten(darkred, 50%)
+
 button
   padding 0.5rem
-  margin 1.5rem
+  margin 1.5rem 0.5rem
   width 5rem
   border-radius 5px
   user-select none

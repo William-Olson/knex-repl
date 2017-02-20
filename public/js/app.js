@@ -1,18 +1,84 @@
+//  Knex-Repl AngularJs App
 
-// init angular
-angular.module('knexrepl', [ ])
+/**
+ * editor themes
+ */
+const aceThemes = [
+  'ambiance','chaos','chrome','clouds','clouds_midnight',
+  'cobalt','crimson_editor','dawn','dreamweaver','eclipse',
+  'github','idle_fingers','iplastic','katzenmilch','kr_theme',
+  'kuroir','merbivore','merbivore_soft','mono_industrial',
+  'monokai','pastel_on_dark','solarized_dark','solarized_light',
+  'sqlserver','terminal','textmate','tomorrow','tomorrow_night',
+  'tomorrow_night_blue','tomorrow_night_bright',
+  'tomorrow_night_eighties','twilight','vibrant_ink', 'xcode'
+];
 
-// services
-.service('editorSvc', [ '$http', function($http) {
+/**
+ * mainCtrl
+ *
+ *  handles parsing editor input and displaying results
+ */
+function mainCtrl($scope, editorSvc)
+{
+  function submit(input)
+  {
+    editorSvc.parse(input).then(r => {
+      if ($scope.output !== r.data && editorSvc.hasSame(input)) {
+        $scope.error = '';
+        $scope.output = r.data;
+      }
+    })
+    .catch(err => {
+      const toDisplay = err.data.message.replace(/\n/gim, '<br>');
+      if ($scope.error !== toDisplay && editorSvc.hasSame(input)) {
+        $scope.output = '';
+        $scope.error = toDisplay;
+      }
+    });
+  }
 
-  /**
-   * Note:
-   *  a ref is just a string with all whitespace stripped.
-   *  service._lastRef is used to avoid excessive events
-   *  (ie. when only whitespace or indentation change).
-   */
+  function clear()
+  {
+    $scope.output = '';
+    $scope.error = '';
+    editorSvc.clear();
+  }
+
+  function setTheme()
+  {
+    editorSvc.selectTheme($scope.currentTheme);
+  }
+
+  editorSvc.init().onChange(submit);
+  editorSvc.setDefaultText('knex.from(\'users\')');
+  $scope.clear = clear;
+  $scope.themes = aceThemes;
+  $scope.currentTheme = aceThemes[0];
+  $scope.setTheme = setTheme;
+}
+
+
+/**
+ * editorSvc
+ *
+ *  provides methods for interaction with the ace editor
+ *  as well as http methods for sending input to the backend
+ *  to be parsed etc.
+ *
+ *  note: editorSvc uses the term ref to represent a state of
+ *   the editor (stored as the input with whitespace stripped).
+ *
+ *   editorSvc._lastRef is the current ref state of the editor.
+ *
+ *   the purpose of tracking _lastRef is to avoid extra calls to
+ *   the server when only whitespace has changed in the editor
+ *   input.
+ */
+function editorSvc($http)
+{
   const service = { _lastRef: null };
-  const EDITOR_DEBOUNCE = 420;
+  const EDITOR_DEBOUNCE = 360;
 
   service.parse = function(str) {
     return $http.post('/parse', { code: str });
@@ -33,7 +99,11 @@ angular.module('knexrepl', [ ])
     service._editor.getSession().setMode('ace/mode/javascript');
     service._editor.getSession().setTabSize(2);
     service._editor.getSession().setUseSoftTabs(true);
-    return service._editor;
+    return service;
+  };
+
+  service.selectTheme = function(theme) {
+    service._editor.setTheme('ace/theme/' + theme);
   };
 
   service.setDefaultText = function(text) {
@@ -41,14 +111,16 @@ angular.module('knexrepl', [ ])
     service._editor.insert(text);
     service._editor.findPrevious(text);
     service._editor.focus();
+    return service;
   };
 
   service.clear = function() {
     service._editor.setValue('');
     service._editor.focus();
+    return service;
   };
 
-  service.onRefChange = function(fn, debounceTime) {
+  service.onChange = function(fn, optDebounceMs) {
     service._editor.getSession().on('change', _.debounce(function() {
         const input = service._editor.getValue();
         const ref = service.getRef(input);
@@ -58,63 +130,30 @@ angular.module('knexrepl', [ ])
           fn(input, ref);
         }
 
-      }, debounceTime || EDITOR_DEBOUNCE));
+      }, optDebounceMs || EDITOR_DEBOUNCE));
+      return service;
   };
 
   return service;
-}])
+}
 
-// filters
-.filter('to_trusted', [ '$sce', function($sce) {
+
+/**
+ * simple filter to trust the html we bind to err div
+ */
+function toTrusted($sce)
+{
   return function(text) {
       return $sce.trustAsHtml(text);
   };
-}])
-
-// controllers
-.controller('mainCtrl', [ '$scope', 'editorSvc', function($scope, editorSvc) {
-
-    /**
-     * for clearing all displays
-     */
-    $scope.clear = function()
-    {
-      $scope.output = '';
-      $scope.error = '';
-      editorSvc.clear();
-    };
-
-    /**
-     * submit a query to the backend
-     */
-    const submit = function(input)
-    {
-      editorSvc.parse(input)
-        .then(r => {
-          if ($scope.output !== r.data && editorSvc.hasSame(input)) {
-            $scope.error = '';
-            $scope.output = r.data;
-          }
-        })
-        .catch(err => {
-          const toDisplay = err.data.message.replace(/\n/gim, '<br>');
-          if ($scope.error !== toDisplay && editorSvc.hasSame(input)) {
-            $scope.output = '';
-            $scope.error = toDisplay;
-          }
-        });
-    };
-
-    /**
-     * handle editor setup and change events
-     */
-    editorSvc.init();
-    editorSvc.onRefChange(submit);
-    editorSvc.setDefaultText('knex.from(\'users\')');
-  }
-
-]);
+}
 
 
-
+/**
+ * angular initialization stuff
+ */
+angular.module('knexrepl', [ ])
+  .service('editorSvc', [ '$http', editorSvc ])
+  .filter('to_trusted', [ '$sce', toTrusted ])
+  .controller('mainCtrl', [ '$scope', 'editorSvc', mainCtrl ]);
 

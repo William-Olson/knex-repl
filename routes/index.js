@@ -21,18 +21,18 @@ module.exports = class Routes {
 
     // exec the code
     executor.input(toParse);
-    const [ res, err ] = executor.getResultOrErrStr();
-    if (err) {
-      throw new Error(err);
+    const [ res, errMsg ] = executor.getResultOrErrStr();
+    if (errMsg) {
+      throw new Error(errMsg);
     }
 
     // format the output
-    const result = await formatter(res);
-    if (result.err) {
-      throw new Error(result.err.message);
+    const { data, err } = await formatter(res);
+    if (err) {
+      throw new Error(err.message);
     }
 
-    return result.data;
+    return data;
   }
 };
 

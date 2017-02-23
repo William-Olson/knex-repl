@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "DEBUG=app* node -r babel-register ./index.js"
+    "start": "DEBUG=app* nodemon --ignore 'lib/*-tmp.js' -r babel-register ./index.js"
   },
   "babel": {
     "plugins": [
@@ -26,7 +26,8 @@
     "stylus": "0.54.5"
   },
   "devDependencies": {
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
     "babel-register": "^6.18.0",
-    "babel-plugin-transform-async-to-generator": "^6.16.0"
+    "nodemon": "^1.11.0"
   }
 }

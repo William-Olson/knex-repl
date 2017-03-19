@@ -121,6 +121,7 @@ function editorSvc($http, $rootScope, $localStorage)
     // use cached data / set defaults
     $rootScope.config = $localStorage.$default({
         theme: aceThemes[0],
+        lastText: ''
     });
 
     service._editor = ace.edit('editor');
@@ -147,9 +148,14 @@ function editorSvc($http, $rootScope, $localStorage)
   };
 
   service.setDefaultText = function(text) {
-    service._editor.setValue('\n\t', 1);
-    service._editor.insert(text);
-    service._editor.findPrevious(text);
+    if ($rootScope.config.lastText) {
+      service._editor.setValue($rootScope.config.lastText);
+    }
+    else {
+      service._editor.setValue('\n\t', 1);
+      service._editor.insert(text);
+      service._editor.findPrevious(text);
+    }
     service._editor.focus();
     return service;
   };
@@ -190,6 +196,7 @@ function editorSvc($http, $rootScope, $localStorage)
 
         if (ref !== service._lastRef) {
           service._lastRef = ref;
+          $rootScope.config.lastText = input;
           fn(input, ref);
         }
 

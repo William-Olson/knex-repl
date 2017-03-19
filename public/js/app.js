@@ -55,7 +55,7 @@ function mainCtrl($scope, editorSvc)
 
   $scope.clear = clear;
   $scope.themes = aceThemes;
-  $scope.currentTheme = aceThemes[0];
+  $scope.currentTheme = editorSvc.currentTheme();
   $scope.setTheme = setTheme;
   $scope.getCode = editorSvc.getInput;
   $scope.selectAll = editorSvc.selectAll;
@@ -80,7 +80,7 @@ function mainCtrl($scope, editorSvc)
  *   the server when only whitespace has changed in the editor
  *   input.
  */
-function editorSvc($http)
+function editorSvc($http, $rootScope, $localStorage)
 {
   const service = { _lastRef: null };
   const EDITOR_DEBOUNCE = 360;
@@ -99,8 +99,14 @@ function editorSvc($http)
   };
 
   service.init = function() {
+
+    // use cached data / set defaults
+    $rootScope.config = $localStorage.$default({
+        theme: aceThemes[0],
+    });
+
     service._editor = ace.edit('editor');
-    service._editor.setTheme('ace/theme/ambiance');
+    service._editor.setTheme('ace/theme/' + $rootScope.config.theme);
     service._editor.getSession().setMode('ace/mode/javascript');
     service._editor.getSession().setTabSize(2);
     service._editor.getSession().setUseSoftTabs(true);
@@ -112,7 +118,14 @@ function editorSvc($http)
   };
 
   service.selectTheme = function(theme) {
+    if ($rootScope.config.theme !== theme) {
+      $rootScope.config.theme = theme;
+    }
     service._editor.setTheme('ace/theme/' + theme);
+  };
+
+  service.currentTheme = function() {
+    return $rootScope.config.theme;
   };
 
   service.setDefaultText = function(text) {
@@ -177,8 +190,8 @@ function toTrusted($sce)
 /**
  * angular initialization stuff
  */
-angular.module('knexrepl', [ ])
-  .service('editorSvc', [ '$http', editorSvc ])
+angular.module('knexrepl', [ 'ngStorage' ])
+  .service('editorSvc', [ '$http', '$rootScope', '$localStorage', editorSvc ])
   .filter('to_trusted', [ '$sce', toTrusted ])
   .controller('mainCtrl', [ '$scope', 'editorSvc', mainCtrl ]);
 

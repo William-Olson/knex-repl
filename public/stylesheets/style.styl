@@ -3,7 +3,7 @@ body
   overflow-y scroll
 
 .content-wrapper
-  margin-top 80px
+  margin-top 8px
   display flex
   flex-direction row
   justify-content space-around
@@ -11,7 +11,7 @@ body
 .content
   display flex
   flex 1 1 auto
-  max-width 1080px
+  // max-width 1080px
 
 .repl-container
   display flex
@@ -23,35 +23,42 @@ body
   flex 1 1 auto
   width 100%
   // min-height 150px
-  min-height 300px
+  // min-height 300px
+  height calc(100vh - 50px)
+  // border dashed 1px purple
   display flex
-  flex-direction row
-  flex-wrap wrap
+  flex-direction column
+
+// make it do the vertical split after expanding past this width
+@media (min-width:1250px)
+  .editor-area
+    flex-direction row
+  .output
+    max-width 650px !important
+    height calc(100vh - 81px) !important
+  .code
+    height 100%
 
 #editor
   font-size 0.8rem
 
 .code
   flex 1 1 auto
-  min-width 100%
-  min-height 450px
   overflow-y auto
+  overflow-x auto
 
 .output
   margin-top 0
   flex 1 1 auto
   background-color lightgrey
   padding 1rem
-  min-height 118px
-  max-height 300px
-  width 350px
+  height calc(100vh - 880px)
+  max-width calc(100vw - 47px)
   overflow-y auto
+  overflow-x auto
 
-.errs
-  flex 1 1 auto
-  .errMsg
-    overflow-y auto
-    color lighten(darkred, 10%)
+.errMsg
+  color lighten(darkred, 10%)
 
 .fake-a
   color darken(lightgrey, 40%)

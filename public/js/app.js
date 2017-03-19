@@ -14,6 +14,23 @@ const aceThemes = [
   'tomorrow_night_eighties','twilight','vibrant_ink', 'xcode'
 ];
 
+
+const iife = `
+(function() {
+
+  const sql = q => q
+    .from('ballers')
+
+
+  // // flow example:
+  // const sel = q => q.select('id');
+  // return flow(sql, sel)(knex);
+
+  return sql(knex);
+
+}());
+`;
+
 /**
  * mainCtrl
  *
@@ -59,6 +76,7 @@ function mainCtrl($scope, editorSvc)
   $scope.setTheme = setTheme;
   $scope.getCode = editorSvc.getInput;
   $scope.selectAll = editorSvc.selectAll;
+  $scope.insertIife = editorSvc.insertIife;
   $scope.focus = editorSvc.focus;
 
 }
@@ -140,6 +158,13 @@ function editorSvc($http, $rootScope, $localStorage)
     service._editor.setValue('');
     service._editor.focus();
     return service;
+  };
+
+  service.insertIife = function() {
+    service.clear();
+    service._editor.insert(iife);
+    service._editor.findPrevious('ballers');
+    service._editor.focus();
   };
 
   service.getInput = function() {

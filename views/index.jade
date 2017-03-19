@@ -11,6 +11,7 @@ block content
       select(ng-show='selectingTheme' ng-model='currentTheme' ng-change='setTheme()')
         option(ng-repeat="theme in themes" value="{{theme}}") {{theme}}
       .fake-a(ng-show='selectingTheme' ng-click='selectingTheme=!selectingTheme; focus()') Ok
+      .fake-a(ng-click='insertIife()') Insert iife
 
     .editor-area
       div.code.js(id='editor' ng-model='input')

@@ -19,7 +19,7 @@ const iife = `
 (function() {
 
   const sql = q => q
-    .from('ballers')
+    .from('favorites')
 
 
   // // flow example:
@@ -169,7 +169,7 @@ function editorSvc($http, $rootScope, $localStorage)
   service.insertIife = function() {
     service.clear();
     service._editor.insert(iife);
-    service._editor.findPrevious('ballers');
+    service._editor.findPrevious('favorites');
     service._editor.focus();
   };
 

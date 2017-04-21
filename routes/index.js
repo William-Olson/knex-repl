@@ -1,11 +1,13 @@
 const Executor = require('../lib/Executor');
 const formatter = require('../lib/formatter');
+const version = require('./version');
 
 module.exports = class Routes {
 
   constructor({ harness })
   {
     harness.get('/', this.getRoot);
+    harness.get('/version', () => version);
     harness.post('/parse', this.parse);
   }
 

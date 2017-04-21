@@ -7,7 +7,7 @@ Extremely simple `knex query` to `sql` converter.
 
 ##### Docker
 
-Available as a docker image...
+Available as a docker image. Run the following 2 commands in your terminal...
 
 ```
 docker pull willko/knex-repl
@@ -15,7 +15,9 @@ docker run -it -p 9933:9933 willko/knex-repl
 ```
 
 After running the above docker commands, the repl should be
-accessible at `http://localhost:9933`
+accessible at `http://localhost:9933` (use `-p <port>:9933` for desired port).
+
+You can also specify a different port if 9933 is already being used.
 
 ##### Build Locally
 

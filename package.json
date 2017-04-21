@@ -1,6 +1,6 @@
 {
   "name": "knex-repl",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "start": "DEBUG=app* node -r babel-register ./index.js"
@@ -17,8 +17,8 @@
     "debug": "~2.2.0",
     "express": "~4.13.4",
     "jade": "~1.11.0",
-    "knex": "^0.12.7",
-    "lodash": "^4.17.4",
+    "knex": "0.12.7",
+    "lodash": "4.17.4",
     "request": "^2.79.0",
     "request-promise": "^4.1.1",
     "route-harness": "^1.1.0",

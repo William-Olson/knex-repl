@@ -3,6 +3,7 @@ all:
 	@make -s run
 
 build:
+	node ./stampBuild.js
 	docker build -t willko/knex-repl:latest .
 
 run:

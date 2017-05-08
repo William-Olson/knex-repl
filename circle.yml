@@ -1,0 +1,24 @@
+machine:
+  node:
+    version: 7.8
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - npm install
+
+test:
+  pre:
+    - make
+  override:
+    - node tests/index.js
+
+# deployment:
+#   hub:
+#     branch: master
+#     commands:
+#       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+#       - docker push willko/knex-repl:latest
+

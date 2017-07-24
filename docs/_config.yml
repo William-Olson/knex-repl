@@ -3,7 +3,4 @@ title: knex-repl
 email: willko747@gmail.com
 description: >
   converts knex code into SQL
-baseurl: ""
-url: "https://knex.wko.io"
-github_username:  William-Olson
-markdown: kramdown
+github_username:  william-olson

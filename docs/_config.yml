@@ -3,15 +3,6 @@ title: knex-repl
 email: willko747@gmail.com
 description: >
   converts knex code into SQL
-  <br>
-  <br>
-  <div class="sidebar-content">
-    <a href="/">Home</a><br>
-    <a href="/install">Install</a><br>
-    <a href="/features">Features</a><br>
-    <a href="/about">About</a><br>
-  </div>
-  <br>
 baseurl: ""
 url: "https://knex.wko.io"
 github_username:  William-Olson

@@ -18,3 +18,18 @@ test('is available', async t => {
 
 
 
+
+test('version is served', async t => {
+
+
+    // fetch version
+    const result = await req({
+      uri: 'http://localhost:9933/version',
+      json: true
+    });
+
+    t.is(typeof result.body.version, 'string');
+    t.is(typeof result.body.timestamp, 'string');
+
+    t.end();
+  });

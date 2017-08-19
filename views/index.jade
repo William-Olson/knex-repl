@@ -13,6 +13,10 @@ block content
       .fake-a(ng-show='selectingTheme' ng-click='selectingTheme=!selectingTheme; focus()') Ok
       .fake-a(ng-click='insertIife()') Insert iife
 
+    .connection-issue-banner(ng-if="hasConnectionIssue")
+      p
+        em Connection to server has been lost...
+
     .editor-area
       div.code.js(id='editor' ng-model='input')
       pre.output.sql(

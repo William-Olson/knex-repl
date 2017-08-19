@@ -41,17 +41,28 @@ function mainCtrl($scope, editorSvc)
   function submit(input)
   {
     editorSvc.parse(input).then(r => {
+      $scope.hasConnectionIssue = null;
       if ($scope.output !== r.data && editorSvc.hasSame(input)) {
         $scope.error = '';
         $scope.output = r.data;
       }
     })
     .catch(err => {
-      const toDisplay = err.data.message.replace(/\n/gim, '<br>');
-      if ($scope.error !== toDisplay && editorSvc.hasSame(input)) {
-        $scope.output = '';
-        $scope.error = toDisplay;
+      console.log('caught error:', err);
+      if (err && err.data && err.data.message) {
+        const toDisplay = err.data.message.replace(/\n/gim, '<br>');
+        if ($scope.error !== toDisplay && editorSvc.hasSame(input)) {
+          $scope.output = '';
+          $scope.error = toDisplay;
+        }
+        return;
       }
+
+      if (err && err.status && err.status === -1) {
+        console.log('error status:', err.status);
+        $scope.hasConnectionIssue = true;
+      }
+
     });
   }
 

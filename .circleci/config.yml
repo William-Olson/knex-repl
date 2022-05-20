@@ -19,7 +19,7 @@ jobs:
           command: npm install
       - run:
           name: Get TAP Converter
-          command: npm install tap-xunit -g
+          command: sudo npm install tap-xunit -g
       - docker/build:
           lint-dockerfile: true 
           image: willko/knex-repl
@@ -30,7 +30,7 @@ jobs:
           command: make
           background: true
       - run:
-          name: Build Images
+          name: Run Tests
           command: |
               sleep 5
               node tests/index.js | tap-xunit > ./test-results.xml

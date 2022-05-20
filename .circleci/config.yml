@@ -6,7 +6,7 @@ orbs:
   docker: circleci/docker@1.7.0
 
 jobs:
-  lint-and-build:
+  build-lint-and-test:
     docker:
       - image: cimg/node:8.17
     steps:
@@ -14,31 +14,21 @@ jobs:
       - setup_remote_docker:
           version: 20.10.14
           docker_layer_caching: true
+      - run:
+          name: Run NPM Install
+          command: npm install
       - docker/build:
           lint-dockerfile: true 
           image: willko/knex-repl
           path: .
           tag: 1.1.$CIRCLE_BUILD_NUM
-  build-and-test:
-    docker:
-      - image: cimg/node:8.17
-    steps:
-      - checkout
-      - run:
-          name: Run NPM Install
-          command: npm install
-      - setup_remote_docker:
-          version: 20.10.14
-          docker_layer_caching: true
       - run:
           name: Build Images
-          command: make
-      - run:
-          name: Run tests
-          command: node tests/index.js
+          command: |
+              make
+              node tests/index.js
 
 workflows:
   main:
     jobs:
-      - lint-and-build
-      - build-and-test
+      - build-lint-and-test

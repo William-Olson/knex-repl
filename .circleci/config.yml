@@ -20,6 +20,9 @@ jobs:
       - run:
           name: Get TAP Converter
           command: sudo npm install tap-xunit -g
+      - run:
+          name: Generate Build Stamp
+          command: node ./stampBuild.js
       - docker/build:
           lint-dockerfile: true 
           image: willko/knex-repl
@@ -27,7 +30,7 @@ jobs:
           tag: 1.1.$CIRCLE_BUILD_NUM
       - run:
           name: Build Images
-          command: make
+          command: docker run -it -p 9933:9933 willko/knex-repl:1.1.$CIRCLE_BUILD_NUM
           background: true
       - run:
           name: Run Tests

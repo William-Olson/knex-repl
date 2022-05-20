@@ -1,4 +1,4 @@
-FROM node:7
+FROM node:17
 
 WORKDIR /opt/knex-repl
 

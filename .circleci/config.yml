@@ -1,0 +1,46 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+
+orbs:
+  docker: circleci/docker@1.7.0
+  node: circleci/node@5.0.2
+
+jobs:
+  build-lint-and-test:
+    machine:
+      image: ubuntu-2004:202104-01
+      docker_layer_caching: true
+    steps:
+      - checkout
+      - node/install:
+          node-version: '17.2'
+      - node/install-packages:
+          override-ci-command: npm install
+      - run:
+          name: Get TAP Converter
+          command: npm install tap-xunit -g
+      - run:
+          name: Generate Build Stamp
+          command: node ./stampBuild.js
+      - docker/build:
+          lint-dockerfile: true 
+          image: willko/knex-repl
+          path: .
+          tag: 1.1.$CIRCLE_BUILD_NUM
+      - run:
+          name: Build Images
+          command: docker run -it -p 9933:9933 willko/knex-repl:1.1.$CIRCLE_BUILD_NUM
+          background: true
+      - run:
+          name: Run Tests
+          command: |
+              sleep 5
+              node tests/index.js | tap-xunit > ./test-results.xml
+      - store_test_results:
+          path: ./test-results.xml
+
+workflows:
+  main:
+    jobs:
+      - build-lint-and-test

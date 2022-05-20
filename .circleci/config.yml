@@ -8,7 +8,7 @@ orbs:
 jobs:
   build-lint-and-test:
     docker:
-      - image: cimg/node:8.17
+      - image: cimg/node:17.2
     steps:
       - checkout
       - setup_remote_docker:

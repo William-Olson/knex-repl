@@ -15,10 +15,11 @@ jobs:
       - checkout
       - node/install:
           node-version: '17.2'
-      - node/install-packages
+      - node/install-packages:
+          override-ci-command: npm install
       - run:
           name: Get TAP Converter
-          command: sudo npm install tap-xunit -g
+          command: npm install tap-xunit -g
       - run:
           name: Generate Build Stamp
           command: node ./stampBuild.js

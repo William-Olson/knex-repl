@@ -13,9 +13,6 @@ jobs:
       docker_layer_caching: true
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.14
-          docker_layer_caching: true
       - node/install:
           node-version: '17.2'
       - node/install-packages

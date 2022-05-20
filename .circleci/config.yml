@@ -4,11 +4,13 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@1.7.0
+  node-orb: vamstar/node-orb@1.0.23
 
 jobs:
   build-lint-and-test:
-    docker:
-      - image: cimg/node:17.2
+    machine:
+      image: ubuntu-2004:202104-01
+      docker_layer_caching: true
     steps:
       - checkout
       - setup_remote_docker:

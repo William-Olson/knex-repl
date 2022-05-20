@@ -4,7 +4,7 @@ version: 2.1
 
 orbs:
   docker: circleci/docker@1.7.0
-  node-orb: vamstar/node-orb@1.0.23
+  node: circleci/node@5.0.2
 
 jobs:
   build-lint-and-test:
@@ -16,9 +16,9 @@ jobs:
       - setup_remote_docker:
           version: 20.10.14
           docker_layer_caching: true
-      - run:
-          name: Run NPM Install
-          command: npm install
+      - node/install:
+          node-version: '17.2'
+      - node/install-packages
       - run:
           name: Get TAP Converter
           command: sudo npm install tap-xunit -g

@@ -10,6 +10,7 @@ jobs:
     docker:
       - image: cimg/node:8.17
     steps:
+      - checkout
       - docker/build:
           lint-dockerfile: true 
           image: willko/knex-repl
@@ -20,6 +21,9 @@ jobs:
       - image: cimg/node:8.17
     steps:
       - checkout
+      - run:
+          name: Run NPM Install
+          command: npm install
       - run:
           name: Build Images
           command: make

@@ -11,6 +11,9 @@ jobs:
       - image: cimg/node:8.17
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
       - docker/build:
           lint-dockerfile: true 
           image: willko/knex-repl
@@ -24,15 +27,15 @@ jobs:
       - run:
           name: Run NPM Install
           command: npm install
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
       - run:
           name: Build Images
           command: make
       - run:
           name: Run tests
           command: node tests/index.js
-      - setup_remote_docker:
-          version: 20.10.14
-          docker_layer_caching: true
 
 workflows:
   main:

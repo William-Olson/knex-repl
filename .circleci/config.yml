@@ -17,6 +17,9 @@ jobs:
       - run:
           name: Run NPM Install
           command: npm install
+      - run:
+          name: Get TAP Converter
+          command: npm install tap-xunit -g
       - docker/build:
           lint-dockerfile: true 
           image: willko/knex-repl
@@ -24,9 +27,15 @@ jobs:
           tag: 1.1.$CIRCLE_BUILD_NUM
       - run:
           name: Build Images
+          command: make
+          background: true
+      - run:
+          name: Build Images
           command: |
-              make
-              node tests/index.js
+              sleep 5
+              node tests/index.js | tap-xunit > ./test-results.xml
+      - store_test_results:
+          path: ./test-results.xml
 
 workflows:
   main:

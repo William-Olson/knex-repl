@@ -1,6 +1,6 @@
 ## knex-repl
 
-[![CircleCI](https://circleci.com/null/William-Olson/knex-repl/tree/master.svg?style=svg)](https://circleci.com/null/William-Olson/knex-repl/tree/master)
+[![CircleCI](https://circleci.com/gh/William-Olson/knex-repl/tree/master.svg?style=svg)](https://circleci.com/gh/William-Olson/knex-repl/tree/master)
 
 Extremely simple `knex query` to `sql` converter.
 
